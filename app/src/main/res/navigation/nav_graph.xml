@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/allTripFragment">
+
+    <fragment
+        android:id="@+id/allTripFragment"
+        android:name="bankernisarg.app.com.locationdemo.ui.trip.AllTripFragment"
+        android:label="all_trip_fragment"
+        tools:layout="@layout/all_trip_fragment" >
+        <action
+            android:id="@+id/action_allTripFragment_to_addNewTripFragment"
+            app:destination="@id/addNewTripFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewTripFragment"
+        android:name="bankernisarg.app.com.locationdemo.ui.add_new_trip.AddNewTripFragment"
+        android:label="fragment_add_new_trip"
+        tools:layout="@layout/fragment_add_new_trip" />
+</navigation>
