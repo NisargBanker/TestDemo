@@ -4,7 +4,7 @@ import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.navigation.Navigation
 import bankernisarg.app.com.locationdemo.data.repositories.AllTripRepository
-import net.simplifiedcoding.mvvmsampleapp.util.lazyDeferred
+import bankernisarg.app.com.locationdemo.util.lazyDeferred
 
 class AllTripViewModel(private val repository: AllTripRepository) : ViewModel() {
 

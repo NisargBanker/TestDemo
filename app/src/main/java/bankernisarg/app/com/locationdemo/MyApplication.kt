@@ -25,7 +25,6 @@ class MyApplication : Application(), KodeinAware {
 
         bind() from singleton { AddNewTripRepository(instance()) }
         bind() from provider { AddNewTripViewModelFactory(instance()) }
-
     }
 
 }

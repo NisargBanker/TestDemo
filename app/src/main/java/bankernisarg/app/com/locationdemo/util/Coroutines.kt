@@ -1,4 +1,4 @@
-package net.simplifiedcoding.mvvmsampleapp.util
+package bankernisarg.app.com.locationdemo.util
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

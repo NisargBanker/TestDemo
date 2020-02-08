@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import bankernisarg.app.com.locationdemo.data.callback.AddTripListener
 import bankernisarg.app.com.locationdemo.data.db.entities.Trip
 import bankernisarg.app.com.locationdemo.data.repositories.AddNewTripRepository
-import net.simplifiedcoding.mvvmsampleapp.util.Coroutines
+import bankernisarg.app.com.locationdemo.util.Coroutines
 import java.lang.Exception
 
 class AddNewTripViewModel(private val repository: AddNewTripRepository) : ViewModel() {

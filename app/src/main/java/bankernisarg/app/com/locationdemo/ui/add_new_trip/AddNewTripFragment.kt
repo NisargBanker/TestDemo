@@ -10,12 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import bankernisarg.app.com.locationdemo.R
 import bankernisarg.app.com.locationdemo.data.callback.AddTripListener
-import bankernisarg.app.com.locationdemo.data.db.entities.Trip
 import bankernisarg.app.com.locationdemo.databinding.FragmentAddNewTripBinding
 import kotlinx.android.synthetic.main.fragment_add_new_trip.*
-import net.simplifiedcoding.mvvmsampleapp.util.hide
-import net.simplifiedcoding.mvvmsampleapp.util.show
-import net.simplifiedcoding.mvvmsampleapp.util.snackbar
+import bankernisarg.app.com.locationdemo.util.hide
+import bankernisarg.app.com.locationdemo.util.show
+import bankernisarg.app.com.locationdemo.util.snackbar
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance

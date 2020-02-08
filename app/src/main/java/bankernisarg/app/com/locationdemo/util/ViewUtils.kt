@@ -1,4 +1,4 @@
-package net.simplifiedcoding.mvvmsampleapp.util
+package bankernisarg.app.com.locationdemo.util
 
 import android.content.Context
 import android.view.View
