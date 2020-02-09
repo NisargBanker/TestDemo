@@ -15,6 +15,7 @@ class LocationUpdatesIntentService : IntentService(TAG) {
                 val result = LocationResult.extractResult(intent)
                 if (result != null) {
                     val locations = result.locations
+                    Utils.setLocationUpdates(locations)
                     Utils.setLocationUpdatesResult(this, locations)
                     Utils.sendNotification(this, Utils.getLocationResultTitle(this, locations))
                     Log.i(TAG, Utils.getLocationUpdatesResult(this))

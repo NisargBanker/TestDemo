@@ -5,15 +5,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import bankernisarg.app.com.locationdemo.data.db.entities.Trip
+import bankernisarg.app.com.locationdemo.data.db.entities.TripData
 
 @Dao
-interface TripDao {
+interface TripDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTrip(trip: Trip) : Long
+    fun saveAllTripData(quotes: List<TripData>)
 
-    @Query("SELECT * FROM Trip")
-    fun getAllTrips() : LiveData<List<Trip>>
+    @Query("SELECT * FROM TripData")
+    fun getAllTrips(): LiveData<List<TripData>>
 
 }

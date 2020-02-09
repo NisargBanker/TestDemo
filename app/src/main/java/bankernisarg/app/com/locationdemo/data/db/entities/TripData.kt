@@ -4,10 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Trip(
-    val trip_name: String,
-    val trip_source_address: String,
-    val trip_destination_address: String
+data class TripData(
+    var trip_id: Int = 0,
+    val lat: Double,
+    val lng: Double,
+    val time: String
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

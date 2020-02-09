@@ -23,6 +23,7 @@ internal object Utils {
     val KEY_LOCATION_UPDATES_REQUESTED = "location-updates-requested"
     val KEY_LOCATION_UPDATES_RESULT = "location-update-result"
     val CHANNEL_ID = "channel_01"
+    var locations : List<Location>? = null
 
     fun setRequestingLocationUpdates(context: Context, value: Boolean) {
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -105,5 +106,9 @@ internal object Utils {
     fun getLocationUpdatesResult(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
             .getString(KEY_LOCATION_UPDATES_RESULT, "")!!
+    }
+
+    fun setLocationUpdates(location: List<Location>){
+        locations =  location
     }
 }

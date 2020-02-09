@@ -16,6 +16,7 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver() {
                 val result = LocationResult.extractResult(intent)
                 if (result != null) {
                     val locations = result.locations
+                    Utils.setLocationUpdates(locations)
                     Utils.setLocationUpdatesResult(context, locations)
                     Utils.sendNotification(
                         context,

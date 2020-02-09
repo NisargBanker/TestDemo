@@ -34,6 +34,9 @@ class AllTripAdapter(
         holder.itemTripBinding.btnEndTrip.setOnClickListener {
             listener.onRecyclerViewItemClick(it, trips[position])
         }
+        holder.itemTripBinding.rootCard.setOnClickListener {
+            listener.onRecyclerViewItemClick(it, trips[position])
+        }
     }
 
 
