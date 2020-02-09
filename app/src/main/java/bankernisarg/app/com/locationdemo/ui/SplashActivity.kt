@@ -1,10 +1,10 @@
-package bankernisarg.app.com.locationdemo
+package bankernisarg.app.com.locationdemo.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import bankernisarg.app.com.locationdemo.ui.MainActivity
+import bankernisarg.app.com.locationdemo.R
 
 class SplashActivity : AppCompatActivity() {
 

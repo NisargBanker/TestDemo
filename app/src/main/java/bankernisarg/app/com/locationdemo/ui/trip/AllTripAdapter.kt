@@ -28,12 +28,12 @@ class AllTripAdapter(
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         holder.itemTripBinding.trip = trips[position]
-        /*holder.itemTripBinding.buttonBook.setOnClickListener {
-            listener.onRecyclerViewItemClick(holder.itemTripBinding.buttonBook, trips[position])
+        holder.itemTripBinding.btnStartTrip.setOnClickListener {
+            listener.onRecyclerViewItemClick(it, trips[position])
         }
-        holder.itemTripBinding.layoutLike.setOnClickListener {
-            listener.onRecyclerViewItemClick(holder.itemTripBinding.layoutLike, trips[position])
-        }*/
+        holder.itemTripBinding.btnEndTrip.setOnClickListener {
+            listener.onRecyclerViewItemClick(it, trips[position])
+        }
     }
 
 
