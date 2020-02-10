@@ -11,7 +11,8 @@ import bankernisarg.app.com.locationdemo.databinding.ItemTripBinding
 
 class AllTripAdapter(
     private val trips: List<Trip>,
-    private val listener: RecyclerViewClickListener
+    private val listener: RecyclerViewClickListener,
+    private val context: AllTripFragment
 ) : RecyclerView.Adapter<AllTripAdapter.MoviesViewHolder>() {
 
     override fun getItemCount() = trips.size
@@ -29,14 +30,27 @@ class AllTripAdapter(
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         holder.itemTripBinding.trip = trips[position]
         holder.itemTripBinding.btnStartTrip.setOnClickListener {
+            context.setTripOnOff(trips[position].id)
+            this.notifyDataSetChanged()
             listener.onRecyclerViewItemClick(it, trips[position])
         }
         holder.itemTripBinding.btnEndTrip.setOnClickListener {
+            context.setTripOnOff(-1)
+            this.notifyDataSetChanged()
             listener.onRecyclerViewItemClick(it, trips[position])
         }
         holder.itemTripBinding.rootCard.setOnClickListener {
             listener.onRecyclerViewItemClick(it, trips[position])
         }
+
+        if (context.getTripOnOff() == trips[position].id){
+            holder.itemTripBinding.btnStartTrip.isEnabled = false
+            holder.itemTripBinding.btnEndTrip.isEnabled = true
+        }else if (context.getTripOnOff() == -1){
+            holder.itemTripBinding.btnStartTrip.isEnabled = true
+            holder.itemTripBinding.btnEndTrip.isEnabled = true
+        }
+
     }
 
 

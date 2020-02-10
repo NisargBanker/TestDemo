@@ -12,18 +12,16 @@ import androidx.fragment.app.Fragment
 import bankernisarg.app.com.locationdemo.R
 import bankernisarg.app.com.locationdemo.data.db.AppDatabase
 import bankernisarg.app.com.locationdemo.data.db.entities.Trip
-import bankernisarg.app.com.locationdemo.databinding.AllTripFragmentBinding
 import bankernisarg.app.com.locationdemo.databinding.FragmentMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+
 
 class MapsFragment : Fragment(), OnMapReadyCallback, KodeinAware {
 
@@ -86,6 +84,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, KodeinAware {
             //BOUND_PADDING is an int to specify padding of bound.. try 100.
             val cu = CameraUpdateFactory.newLatLngBounds(bounds, 10)
             mMap.animateCamera(cu)
+
+            mMap.addMarker(MarkerOptions().position(list[0]))
+            mMap.addMarker(MarkerOptions().position(list[list.size-1]))
         }, 500)
 
     }
@@ -97,6 +98,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, KodeinAware {
 
             mList.clear()
 
+
+            //setMarker(LatLng(it[0].lat, it[0].lng))
+
             for (trip in it.indices) {
                 mList.add(LatLng(it[trip].lat, it[trip].lng))
             }
@@ -104,6 +108,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback, KodeinAware {
         }
 
 
+    }
+
+    private fun setMarker(latLng: LatLng) {
+        val marker =
+            MarkerOptions().position(latLng).title("Hello Maps")
+        mMap.addMarker(marker)
     }
 
 }

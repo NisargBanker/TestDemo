@@ -18,6 +18,7 @@
         android:theme="@style/AppTheme">
 
         <androidx.appcompat.widget.Toolbar
+            app:theme="@style/ToolbarTheme"
             android:id="@+id/toolbar"
             app:titleTextColor="@color/white"
             android:layout_width="match_parent"

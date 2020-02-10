@@ -29,7 +29,6 @@ import bankernisarg.app.com.locationdemo.data.db.entities.TripData
 import bankernisarg.app.com.locationdemo.data.location.LocationUpdatesBroadcastReceiver
 import bankernisarg.app.com.locationdemo.data.location.Utils
 import bankernisarg.app.com.locationdemo.databinding.AllTripFragmentBinding
-import bankernisarg.app.com.locationdemo.ui.map_route.MapsActivity
 import bankernisarg.app.com.locationdemo.util.Coroutines
 import bankernisarg.app.com.locationdemo.util.hide
 import bankernisarg.app.com.locationdemo.util.show
@@ -49,6 +48,8 @@ import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+val TRIP_STATUS = "trip_status"
+
 class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -66,12 +67,11 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
     private val FASTEST_UPDATE_INTERVAL: Long = 10000
 
     private val MAX_WAIT_TIME = UPDATE_INTERVAL
-    private var mRequestingLocationUpdates: Boolean? = null
     private var mSettingsClient: SettingsClient? = null
     private var mLocationSettingsRequest: LocationSettingsRequest? = null
     private var mLocationCallback: LocationCallback? = null
 
-    private var mTripData: ArrayList<TripData>? = null
+    private var mTripData: ArrayList<TripData>? = ArrayList()
     private var mSelectedTripId: Int? = null
 
     private val pendingIntent: PendingIntent
@@ -103,7 +103,6 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
         super.onActivityCreated(savedInstanceState)
         bindUI()
 
-        mRequestingLocationUpdates = false
         mFusedLocationClient =
             LocationServices.getFusedLocationProviderClient(this.requireContext())
         mSettingsClient = LocationServices.getSettingsClient(this.requireContext())
@@ -117,10 +116,13 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
         viewModel.trips.await().observe(this, Observer { it ->
             progress_bar.hide()
             val trips = it
+            if (it.isEmpty()){
+                activity?.toast("Please add trip from Floating Action Button!!")
+            }
             binding.recTrip.also {
                 it.layoutManager = LinearLayoutManager(requireContext())
                 it.setHasFixedSize(true)
-                it.adapter = AllTripAdapter(trips, this)
+                it.adapter = AllTripAdapter(trips, this, this)
                 it.layoutAnimation =
                     AnimationUtils.loadLayoutAnimation(context, R.anim.list_layout_controller)
             }
@@ -140,7 +142,9 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
             }
             R.id.root_card -> {
                 Navigation.findNavController(view).navigate(
-                    AllTripFragmentDirections.actionAllTripFragmentToMapsFragment(trip).setTripId(trip.id)
+                    AllTripFragmentDirections.actionAllTripFragmentToMapsFragment(trip).setTripId(
+                        trip.id
+                    )
                 )
             }
         }
@@ -201,6 +205,7 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
     }
 
     fun requestLocationUpdates(view: View?) {
+        activity?.toast("Trip Started")
         try {
             Log.i(TAG, "Starting location updates")
             Utils.setRequestingLocationUpdates(this.requireContext(), true)
@@ -213,8 +218,13 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
     }
 
     suspend fun removeLocationUpdates(view: View) {
-        withContext(Dispatchers.IO) {
-            db.getTripDataDao().saveAllTripData(mTripData!!)
+        activity?.toast("Trip Ended...You can check timeline now for it.")
+
+        binding.recTrip.adapter!!.notifyDataSetChanged()
+        if (mTripData!!.isNotEmpty()){
+            withContext(Dispatchers.IO) {
+                db.getTripDataDao().saveAllTripData(mTripData!!)
+            }
         }
         Utils.setRequestingLocationUpdates(this.requireContext(), false)
         mFusedLocationClient!!.removeLocationUpdates(pendingIntent)
@@ -229,10 +239,7 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
     }
 
     fun startUpdatesButtonHandler(view: View) {
-        if (!mRequestingLocationUpdates!!) {
-            mRequestingLocationUpdates = true
-            startLocationUpdates()
-        }
+        startLocationUpdates()
     }
 
     private fun buildLocationSettingsRequest() {
@@ -249,6 +256,8 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
                 OnSuccessListener<LocationSettingsResponse> {
                     Log.i(TAG, "All location settings are satisfied.")
                     mTripData = ArrayList()
+                    requestLocationUpdates(view)
+                    binding.recTrip.adapter!!.notifyDataSetChanged()
                 })
             .addOnFailureListener(this.requireActivity(), OnFailureListener { e ->
                 val statusCode = (e as ApiException).statusCode
@@ -273,7 +282,6 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
                         val errorMessage =
                             "Location settings are inadequate, and cannot be " + "fixed here. Fix in Settings."
                         Log.e(TAG, errorMessage)
-                        mRequestingLocationUpdates = false
                     }
                 }
             })
@@ -283,14 +291,29 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
         when (requestCode) {
             // Check for the integer request code originally supplied to startResolutionForResult().
             REQUEST_CHECK_SETTINGS -> when (resultCode) {
-                Activity.RESULT_OK -> requestLocationUpdates(view)
+                Activity.RESULT_OK -> {
+                    requestLocationUpdates(view)
+                }
 
                 Activity.RESULT_CANCELED -> {
                     Log.i(TAG, "User chose not to make required location settings changes.")
-                    mRequestingLocationUpdates = false
                 }
             }// Nothing to do. startLocationupdates() gets called in onResume again.
         }
+    }
+
+    public fun setTripOnOff(id: Int) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putInt(
+                TRIP_STATUS, id
+            )
+            .apply()
+    }
+
+    public fun getTripOnOff(): Int {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getInt(TRIP_STATUS, -1)
     }
 
 }
