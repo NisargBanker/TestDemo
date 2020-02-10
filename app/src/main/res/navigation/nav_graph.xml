@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/allTripFragment">
+
+    <fragment
+        android:id="@+id/allTripFragment"
+        android:name="bankernisarg.app.com.locationdemo.ui.trip.AllTripFragment"
+        android:label="All Trips"
+        tools:layout="@layout/all_trip_fragment" >
+        <action
+            android:id="@+id/action_allTripFragment_to_addNewTripFragment"
+            app:destination="@id/addNewTripFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_allTripFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/addNewTripFragment"
+        android:name="bankernisarg.app.com.locationdemo.ui.add_new_trip.AddNewTripFragment"
+        android:label="Add New Trip"
+        tools:layout="@layout/fragment_add_new_trip" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="bankernisarg.app.com.locationdemo.ui.map_route.MapsFragment"
+        android:label="Trip" >
+        <argument
+            android:name="trip_id"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="trip_data"
+            app:argType="bankernisarg.app.com.locationdemo.data.db.entities.Trip" />
+    </fragment>
+</navigation>
