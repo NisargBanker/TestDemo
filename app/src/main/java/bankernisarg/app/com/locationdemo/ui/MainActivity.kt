@@ -4,14 +4,18 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import bankernisarg.app.com.locationdemo.BuildConfig
 import bankernisarg.app.com.locationdemo.R
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,10 +28,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(toolbar)
+        val navController = findNavController(R.id.myNavHostFragment)
+        setupActionBarWithNavController(navController)
+
         if (!checkPermissions()) {
             requestPermissions()
         }
     }
+
+    override fun onSupportNavigateUp() = findNavController(R.id.myNavHostFragment).navigateUp()
 
     private fun checkPermissions(): Boolean {
         val fineLocationPermissionState = ActivityCompat.checkSelfPermission(
@@ -94,21 +104,23 @@ class MainActivity : AppCompatActivity() {
                 //requestLocationUpdates(null)
 
             } else {
-                Snackbar.make(
-                    findViewById(R.id.root_layout),
-                    R.string.permission_denied_explanation,
-                    Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.settings) {
-                        // Build intent that displays the App settings screen.
-                        val intent = Intent()
-                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                        val uri = Uri.fromParts("package",
-                            BuildConfig.APPLICATION_ID, null)
-                        intent.data = uri
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                    }
-                    .show()
+                if (Build.VERSION.SDK_INT >= 29){
+                    Snackbar.make(
+                        findViewById(R.id.root_layout),
+                        R.string.permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.settings) {
+                            // Build intent that displays the App settings screen.
+                            val intent = Intent()
+                            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                            val uri = Uri.fromParts("package",
+                                BuildConfig.APPLICATION_ID, null)
+                            intent.data = uri
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                        }
+                        .show()
+                }
             }
         }
     }

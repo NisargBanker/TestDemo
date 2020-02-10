@@ -18,6 +18,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import bankernisarg.app.com.locationdemo.R
@@ -75,7 +76,6 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
 
     private val pendingIntent: PendingIntent
         get() {
-
             val intent = Intent(this.activity, LocationUpdatesBroadcastReceiver::class.java)
             intent.action = LocationUpdatesBroadcastReceiver.ACTION_PROCESS_UPDATES
             return PendingIntent.getBroadcast(
@@ -121,7 +121,8 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
                 it.layoutManager = LinearLayoutManager(requireContext())
                 it.setHasFixedSize(true)
                 it.adapter = AllTripAdapter(trips, this)
-                it.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.list_layout_controller)
+                it.layoutAnimation =
+                    AnimationUtils.loadLayoutAnimation(context, R.anim.list_layout_controller)
             }
         })
     }
@@ -138,9 +139,9 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
                 }
             }
             R.id.root_card -> {
-                Intent(this.requireContext() , MapsActivity::class.java).also {
-                    startActivity(it)
-                }
+                Navigation.findNavController(view).navigate(
+                    AllTripFragmentDirections.actionAllTripFragmentToMapsFragment(trip).setTripId(trip.id)
+                )
             }
         }
     }
@@ -151,13 +152,13 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
             .registerOnSharedPreferenceChangeListener(this)
     }
 
-  /*  override fun onResume() {
-        super.onResume()
-        if (mRequestingLocationUpdates!! && checkPermissions()) {
-            //startLocationUpdates()
-        }
-        Utils.getRequestingLocationUpdates(this.requireContext())
-    }*/
+    /*  override fun onResume() {
+          super.onResume()
+          if (mRequestingLocationUpdates!! && checkPermissions()) {
+              //startLocationUpdates()
+          }
+          Utils.getRequestingLocationUpdates(this.requireContext())
+      }*/
 
     override fun onStop() {
         PreferenceManager.getDefaultSharedPreferences(this.requireContext())
@@ -248,7 +249,6 @@ class AllTripFragment : Fragment(), KodeinAware, RecyclerViewClickListener,
                 OnSuccessListener<LocationSettingsResponse> {
                     Log.i(TAG, "All location settings are satisfied.")
                     mTripData = ArrayList()
-                    requestLocationUpdates(view)
                 })
             .addOnFailureListener(this.requireActivity(), OnFailureListener { e ->
                 val statusCode = (e as ApiException).statusCode

@@ -13,7 +13,7 @@ interface TripDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveAllTripData(quotes: List<TripData>)
 
-    @Query("SELECT * FROM TripData")
-    fun getAllTrips(): LiveData<List<TripData>>
+    @Query("SELECT * FROM TripData WHERE trip_id = :id")
+    fun getAllTrips(id: Int): LiveData<List<TripData>>
 
 }
